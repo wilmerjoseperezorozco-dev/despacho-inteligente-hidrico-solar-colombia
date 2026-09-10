@@ -21,6 +21,9 @@ data/raw/*
 !data/raw/.gitkeep
 data/processed/*
 !data/processed/.gitkeep
+# Excepcion: poligonos de cuenca delineados (livianos, son insumo de referencia, no datos crudos)
+!data/processed/cuencas/
+!data/processed/cuencas/*.geojson
 
 # Modelos entrenados (usar Git LFS o DVC si se requieren versionar)
 models/checkpoints/*.pt

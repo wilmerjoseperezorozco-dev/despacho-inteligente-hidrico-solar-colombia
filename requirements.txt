@@ -26,5 +26,6 @@ notebook
 # Acceso a datos abiertos
 requests
 
-# Geoespacial (recorte de rásters CHIRPS/IMERG a la cuenca de interés)
+# Geoespacial (recorte de rásters CHIRPS/IMERG, delineación de cuenca)
 rasterio
+pysheds
