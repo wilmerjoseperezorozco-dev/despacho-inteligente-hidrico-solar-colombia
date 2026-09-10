@@ -1,0 +1,27 @@
+# Manejo y análisis de datos
+pandas
+numpy
+scipy
+
+# Modelado y machine learning
+scikit-learn
+xgboost
+lightgbm
+
+# Series temporales / deep learning (predicción de caudal)
+tensorflow
+
+# Optimización (motor de despacho)
+pulp
+cvxpy
+
+# Visualización
+matplotlib
+seaborn
+
+# Notebooks
+jupyter
+notebook
+
+# Acceso a datos abiertos
+requests
