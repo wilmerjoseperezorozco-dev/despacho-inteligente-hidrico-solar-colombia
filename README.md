@@ -83,7 +83,7 @@ Cuantificación del efecto de la cobertura fotovoltaica flotante sobre la tasa d
 |---|---|---|
 | Fase 0 — Marco y alcance | Investigación preliminar, selección de línea prioritaria, definición de alcance | ✅ Completada |
 | Fase 1 — Datos y estado del arte | Recolección de series IDEAM/XM, revisión de literatura de despacho hidro-solar, ingesta satelital CHIRPS/IMERG para páramo | ✅ Cerrada — dataset consolidado diario (2024-2026, 974 días, XM+IDEAM+CHIRPS) + CHIRPS mensual completo (2000-2026) |
-| Fase 2 — Modelo de predicción de caudal | Entrenamiento y validación del modelo con datos históricos | ⏳ Pendiente |
+| Fase 2 — Modelo de predicción de caudal | Entrenamiento y validación del modelo con datos históricos | 🔄 En progreso — baseline de persistencia y climatología evaluados con walk-forward (NSE, KGE); siguiente paso: modelo ML con precipitación como predictor |
 | Fase 3 — Motor de optimización de despacho | Diseño y simulación del algoritmo de coordinación hídrico-solar | ⏳ Pendiente |
 | Fase 4 — Validación y propuesta | Backtesting, documentación técnica y propuesta formal a actores del sector | ⏳ Pendiente |
 
