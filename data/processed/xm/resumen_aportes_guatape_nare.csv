@@ -1,0 +1,3 @@
+rio,fecha_inicio,fecha_fin,registros,dias_totales_periodo,cobertura_pct,caudal_min_m3s,caudal_max_m3s,caudal_medio_m3s,alias_xm_usados
+GUATAPE,2000-01-01,2026-09-12,9745,9752,99.9,0.37,243.79,36.14,GUATAPE
+NARE,2000-01-01,2026-09-12,9745,9752,99.9,5.65,309.67,45.7,NARE|NARE CP

@@ -27,6 +27,9 @@ data/processed/*
 # Excepcion: resumenes de calidad/cobertura de series IDEAM (livianos, no son la serie cruda)
 !data/processed/ideam/
 !data/processed/ideam/*.csv
+# Excepcion: resumen de aportes hidricos XM (liviano, no es la serie cruda completa)
+!data/processed/xm/
+!data/processed/xm/*.csv
 
 # Modelos entrenados (usar Git LFS o DVC si se requieren versionar)
 models/checkpoints/*.pt
