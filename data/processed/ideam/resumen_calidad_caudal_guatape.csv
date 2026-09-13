@@ -1,0 +1,5 @@
+codigo,nombre,fecha_inicio,fecha_fin,registros,dias_totales_periodo,cobertura_pct,aprobados,preliminares,caudal_min_m3s,caudal_max_m3s,caudal_medio_m3s
+0023087150,Puente Real (Río Negro),1974-01-01,2026-09-11,17546,19247,91.2,0,17546,0.01,95.89,7.68
+0023087660,Puente La Feria (Marinilla),1994-01-01,2026-07-31,8024,11900,67.4,0,8024,0.76,65.35,4.84
+0023087670,Riotex (Quebrada La Mosca),1994-01-01,2026-08-31,11841,11931,99.2,0,11841,1.23,43.38,5.92
+0023087690,Bodegas (Quebrada Leonera),1994-01-01,1998-08-31,1662,1704,97.5,0,1662,0.09,13.43,0.45

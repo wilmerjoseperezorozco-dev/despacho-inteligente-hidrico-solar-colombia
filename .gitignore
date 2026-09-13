@@ -24,6 +24,9 @@ data/processed/*
 # Excepcion: poligonos de cuenca delineados (livianos, son insumo de referencia, no datos crudos)
 !data/processed/cuencas/
 !data/processed/cuencas/*.geojson
+# Excepcion: resumenes de calidad/cobertura de series IDEAM (livianos, no son la serie cruda)
+!data/processed/ideam/
+!data/processed/ideam/*.csv
 
 # Modelos entrenados (usar Git LFS o DVC si se requieren versionar)
 models/checkpoints/*.pt
