@@ -83,7 +83,7 @@ Cuantificación del efecto de la cobertura fotovoltaica flotante sobre la tasa d
 |---|---|---|
 | Fase 0 — Marco y alcance | Investigación preliminar, selección de línea prioritaria, definición de alcance | ✅ Completada |
 | Fase 1 — Datos y estado del arte | Recolección de series IDEAM/XM, revisión de literatura de despacho hidro-solar, ingesta satelital CHIRPS/IMERG para páramo | ✅ Cerrada — dataset consolidado diario (2024-2026, 974 días, XM+IDEAM+CHIRPS) + CHIRPS mensual completo (2000-2026) |
-| Fase 2 — Modelo de predicción de caudal | Entrenamiento y validación del modelo con datos históricos | 🔄 En progreso — GBM regularizado + walk-forward real: confirma mejora robusta en GUATAPE (NSE≈0,07-0,08), mejora NARE sin superar persistencia (0,19→0,27); sobreajuste identificado como limitación de datos, no de hiperparámetros |
+| Fase 2 — Modelo de predicción de caudal | Entrenamiento y validación del modelo con datos históricos | 🔄 En progreso — GUATAPE: NSE 0,124 tras quitar predictor con importancia negativa confirmada (Riotex); NARE mejora sin superar persistencia (0,19→0,27); sobreajuste identificado como limitación de datos, no de hiperparámetros |
 | Fase 3 — Motor de optimización de despacho | Diseño y simulación del algoritmo de coordinación hídrico-solar | ⏳ Pendiente |
 | Fase 4 — Validación y propuesta | Backtesting, documentación técnica y propuesta formal a actores del sector | ⏳ Pendiente |
 

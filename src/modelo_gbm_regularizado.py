@@ -133,6 +133,12 @@ def main():
     ap.add_argument("--objetivo", default="xm_guatape_m3s")
     ap.add_argument("--frac-test", type=float, default=0.2)
     ap.add_argument("--ventana-reentreno", type=int, default=30)
+    ap.add_argument(
+        "--excluir",
+        nargs="*",
+        default=[],
+        help="Columnas predictoras a excluir (ej. para probar el efecto de quitar una variable con importancia negativa)",
+    )
     args = ap.parse_args()
 
     df = pd.read_csv(args.dataset, parse_dates=["fecha"])
@@ -146,6 +152,14 @@ def main():
         + [f"{c}_faltante" for c in COLUMNAS_IDEAM_USABLES]
         + ["mes_sin", "mes_cos"]
     )
+    if args.excluir:
+        antes = set(columnas)
+        columnas = [c for c in columnas if c not in args.excluir]
+        no_encontradas = set(args.excluir) - antes
+        if no_encontradas:
+            print(f"[AVISO] No existen estas columnas a excluir (revisar el nombre): {no_encontradas}")
+        print(f"Excluyendo del modelo: {[c for c in args.excluir if c in antes]}")
+
     df_valido = df_feat.dropna(subset=columnas + ["objetivo_t1"]).reset_index(drop=True)
 
     n = len(df_valido)
@@ -187,12 +201,16 @@ def main():
     print("\nImportancia por permutacion (reduccion de MSE al mezclar cada variable, en el periodo de prueba):")
     print(importancias.to_string())
 
+    sufijo = args.objetivo
+    if args.excluir:
+        sufijo += "_sin_" + "_".join(c.replace("ideam_", "").replace("_m3s_hoy", "") for c in args.excluir)
+
     salida_dir = Path("../data/processed")
-    tabla_busqueda.to_csv(salida_dir / f"gbm_v2_busqueda_hiperparametros_{args.objetivo}.csv", index=False)
-    pd.Series(metricas_test).to_csv(salida_dir / f"gbm_v2_resultados_{args.objetivo}.csv", header=["valor"])
-    importancias.to_csv(salida_dir / f"gbm_v2_importancias_{args.objetivo}.csv", header=["importancia"])
-    df_pred.to_csv(salida_dir / f"gbm_v2_predicciones_{args.objetivo}.csv", index=False)
-    print(f"\nGuardado en {salida_dir}/gbm_v2_*_{args.objetivo}.csv")
+    tabla_busqueda.to_csv(salida_dir / f"gbm_v2_busqueda_hiperparametros_{sufijo}.csv", index=False)
+    pd.Series(metricas_test).to_csv(salida_dir / f"gbm_v2_resultados_{sufijo}.csv", header=["valor"])
+    importancias.to_csv(salida_dir / f"gbm_v2_importancias_{sufijo}.csv", header=["importancia"])
+    df_pred.to_csv(salida_dir / f"gbm_v2_predicciones_{sufijo}.csv", index=False)
+    print(f"\nGuardado en {salida_dir}/gbm_v2_*_{sufijo}.csv")
 
 
 if __name__ == "__main__":
