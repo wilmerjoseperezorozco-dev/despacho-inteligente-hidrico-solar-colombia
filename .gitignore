@@ -35,6 +35,10 @@ data/processed/*
 # Excepcion: resultados y predicciones del modelo baseline (livianos, son resultados no datos crudos)
 !data/processed/baseline_resultados*.csv
 !data/processed/baseline_predicciones_*.csv
+# Excepcion: resultados, importancias y predicciones del modelo GBM
+!data/processed/gbm_resultados_*.csv
+!data/processed/gbm_importancias_*.csv
+!data/processed/gbm_predicciones_*.csv
 
 # Modelos entrenados (usar Git LFS o DVC si se requieren versionar)
 models/checkpoints/*.pt
