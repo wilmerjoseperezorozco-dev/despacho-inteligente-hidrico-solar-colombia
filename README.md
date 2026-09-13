@@ -12,6 +12,8 @@ Este proyecto investiga el diseño de esa capa de coordinación: un sistema que 
 
 Es un proyecto en **etapa de investigación**, con vocación de convertirse en una propuesta técnica formal para actores del sector (operadores de embalse, UPME, academia) una vez validada la hipótesis con datos históricos públicos.
 
+**Motivación adicional (2026-09-13):** la demanda eléctrica de la inteligencia artificial está creciendo más rápido que la capacidad de generación firme disponible globalmente, y los grandes compradores de energía ya buscan específicamente "clean firm power" — exactamente lo que este sistema está diseñado para producir. Ver [`docs/oportunidad-demanda-ia-energia.md`](docs/oportunidad-demanda-ia-energia.md) para el análisis completo, con cifras verificadas de Colombia, precedentes internacionales (Paraguay) y el contexto de ritmo/prudencia con el que la propia industria de IA está pidiendo avanzar.
+
 ---
 
 ## Problema técnico
