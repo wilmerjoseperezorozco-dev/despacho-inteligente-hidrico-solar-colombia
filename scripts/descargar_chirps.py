@@ -108,11 +108,26 @@ def main():
     salida.mkdir(parents=True, exist_ok=True)
     tmp.mkdir(parents=True, exist_ok=True)
 
+    # Escritura incremental y reanudable: una corrida larga que se interrumpe
+    # (timeout, corte de red) no debe perder el trabajo ya hecho. Ver el mismo
+    # problema real encontrado y corregido en descargar_chirps_mensual.py
+    # (docs/dataset-consolidado-fase1.md).
     csv_path = salida / "precipitacion_diaria.csv"
-    filas = []
+    ya_procesados = set()
+    if csv_path.exists():
+        with open(csv_path, encoding="utf-8") as f:
+            ya_procesados = {row.split(",")[0] for row in f.readlines()[1:] if row.strip()}
+        print(f"Reanudando: {len(ya_procesados)} días ya estaban guardados de una corrida previa.")
+    else:
+        with open(csv_path, "w", encoding="utf-8") as f:
+            f.write("fecha,precip_media_mm,precip_min_mm,precip_max_mm\n")
 
+    procesados_esta_corrida = 0
     for fecha in rango_fechas(inicio, fin):
-        print(f"Procesando {fecha.isoformat()}...")
+        clave = fecha.isoformat()
+        if clave in ya_procesados:
+            continue
+        print(f"Procesando {clave}...")
         ruta_tif = descargar_dia(fecha, tmp)
         if ruta_tif is None:
             continue
@@ -120,19 +135,16 @@ def main():
         if resultado is None:
             continue
         media, minimo, maximo = resultado
-        filas.append((fecha.isoformat(), media, minimo, maximo))
+        with open(csv_path, "a", encoding="utf-8") as f:
+            f.write(f"{clave},{media},{minimo},{maximo}\n")
+        procesados_esta_corrida += 1
         if not args.mantener_globales:
             ruta_tif.unlink(missing_ok=True)
-
-    with open(csv_path, "w", encoding="utf-8") as f:
-        f.write("fecha,precip_media_mm,precip_min_mm,precip_max_mm\n")
-        for fila in filas:
-            f.write(",".join(str(x) for x in fila) + "\n")
 
     if not args.mantener_globales:
         shutil.rmtree(tmp, ignore_errors=True)
 
-    print(f"\nListo. {len(filas)} días procesados. CSV: {csv_path}")
+    print(f"\nListo. {procesados_esta_corrida} días nuevos procesados en esta corrida. CSV: {csv_path}")
 
 
 if __name__ == "__main__":
