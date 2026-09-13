@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+title: "Despacho Inteligente Hídrico-Solar — Colombia"
+message: "Si utilizas este proyecto en tu investigación, cítalo como se muestra a continuación."
+type: software
+authors:
+  - family-names: Pérez Orozco
+    given-names: Wilmer José
+    orcid: "https://orcid.org/0000-0000-0000-0000"  # Actualiza con tu ORCID si tienes
+repository-code: "https://github.com/wilmerjoseperezorozco-dev/despacho-inteligente-hidrico-solar-colombia"
+url: "https://github.com/wilmerjoseperezorozco-dev/despacho-inteligente-hidrico-solar-colombia"
+abstract: "Investigación aplicada para coordinar en tiempo real la generación hidroeléctrica y solar fotovoltaica flotante en Colombia mediante predicción de caudal basada en microclimas andinos."
+keywords:
+  - "Despacho de energía"
+  - "Energía solar flotante"
+  - "Predicción de caudal"
+  - "Machine Learning"
+  - "Control predictivo"
+  - "Sistema eléctrico colombiano"
+  - "Microclimas andinos"
+license: MIT
+version: 0.1.0
+date-released: 2026-09-13
