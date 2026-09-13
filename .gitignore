@@ -39,6 +39,8 @@ data/processed/*
 !data/processed/gbm_resultados_*.csv
 !data/processed/gbm_importancias_*.csv
 !data/processed/gbm_predicciones_*.csv
+# Excepcion: resultados del modelo GBM v2 (regularizado + walk-forward)
+!data/processed/gbm_v2_*.csv
 
 # Modelos entrenados (usar Git LFS o DVC si se requieren versionar)
 models/checkpoints/*.pt
