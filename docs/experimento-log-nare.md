@@ -2,6 +2,13 @@
 
 Cierra [issue #2](https://github.com/wilmerjoseperezorozco-dev/despacho-inteligente-hidrico-solar-colombia/issues/2).
 
+> **Actualización 2026-09-14**: los archivos `data/processed/gbm_v2_*_log.csv` fueron sobrescritos al repetir
+> este experimento sobre el dataset extendido 2000-2026 — ya no contienen las cifras citadas abajo. El hallazgo
+> cualitativo se sostiene (el log1p sigue reduciendo el sesgo de forma real) y de hecho se fortalece: con más
+> datos, NSE con log1p llega a 0,762 frente a 0,710 sin transformar, aunque la persistencia (0,814 en ese mismo
+> período extendido) sigue sin superarse. Ver `docs/dataset-extendido-2000-2026.md` sección 3-4 para las cifras
+> vigentes.
+
 ## 1. Hipótesis y resultado
 
 `docs/modelo-gbm-regularizado-v2.md` documentó que el modelo GBM de NARE sobreestima sistemáticamente el caudal en períodos de flujo bajo (PBIAS +17,4%), que son la mayoría de los días de la serie. La hipótesis: la distribución de caudal es asimétrica (cola larga hacia crecidas), y ajustar el modelo sobre `log1p(caudal)` en vez del caudal crudo podría reducir ese sesgo.

@@ -1,5 +1,12 @@
 # Atacando el sobreajuste — modelo GBM v2 (regularizado + walk-forward real)
 
+> **Actualización 2026-09-14**: los archivos `data/processed/gbm_v2_*.csv` referenciados en este documento fueron
+> sobrescritos al reentrenar sobre el dataset extendido 2000-2026 (ver `docs/dataset-extendido-2000-2026.md`) —
+> ya NO contienen las cifras citadas abajo (dataset corto, 2024-2026). Este documento se conserva íntegro como
+> registro histórico del razonamiento y el diagnóstico (el hallazgo de que el sobreajuste era una limitación de
+> datos, no de configuración, resultó ser correcto y se confirmó explícitamente en el documento de actualización).
+> Para las cifras vigentes, ver `docs/dataset-extendido-2000-2026.md`.
+
 ## 1. Qué se cambió, concretamente
 
 El modelo v1 (`docs/modelo-gbm-caudal.md`) mostró sobreajuste real (diferencia NSE train-test >0,3 en ambos ríos). En vez de bajar un hiperparámetro a mano, se atacó con tres cambios estructurales, implementados en [`src/modelo_gbm_regularizado.py`](../src/modelo_gbm_regularizado.py):

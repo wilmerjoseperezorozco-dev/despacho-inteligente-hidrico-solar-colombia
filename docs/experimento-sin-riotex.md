@@ -1,6 +1,15 @@
-# Experimento: quitar Riotex de GUATAPE — confirmado
+# Experimento: quitar Riotex de GUATAPE — confirmado (con el dataset corto; revertido con más datos)
 
-## 1. Hipótesis y resultado
+> **Actualización 2026-09-14 — IMPORTANTE, cambia la recomendación de este documento**: al repetir este
+> experimento sobre el dataset extendido 2000-2026 (10 veces más datos), **remover Riotex ya NO mejora el
+> modelo** (NSE prácticamente igual, ligeramente peor sin ella), y Riotex aparece con importancia por
+> permutación POSITIVA en la corrida completa. La advertencia metodológica de la sección 3 de este documento
+> —que la decisión se informó con importancia calculada sobre un período de prueba corto y no debía
+> generalizarse sin más validación— resultó ser acertada. **Se revierte la recomendación: Riotex se mantiene
+> como predictor.** Ver `docs/dataset-extendido-2000-2026.md` sección 5 para el detalle. Este documento se
+> conserva íntegro como registro histórico de cómo se llegó a la conclusión original y por qué no se sostuvo.
+
+## 1. Hipótesis y resultado (dataset corto, 2024-2026 — ver actualización arriba)
 
 `docs/modelo-gbm-regularizado-v2.md` (sección 4) encontró que la estación IDEAM Riotex (`ideam_0023087670_m3s_hoy`, Quebrada La Mosca) tenía importancia por permutación **negativa** (-15,09) en el modelo de GUATAPE — mezclarla al azar mejoraba el resultado. Se probó removerla.
 
