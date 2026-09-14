@@ -1,5 +1,8 @@
 # Despacho Inteligente Hídrico-Solar — Colombia
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22757736.svg)](https://doi.org/10.5281/zenodo.22757736)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Investigación aplicada para coordinar en tiempo real la generación hidroeléctrica y la solar fotovoltaica flotante sobre un mismo embalse, mediante predicción de caudal basada en microclimas andinos.**
 
 *[Read this in English ↓](#english-version)*
@@ -177,6 +180,10 @@ despacho-inteligente-hidrico-solar-colombia/
 
 ---
 
+## Cómo citar
+
+Este repositorio está archivado permanentemente en Zenodo. Para citar el proyecto en general (apunta siempre a la última versión), usar el DOI de concepto `10.5281/zenodo.22757736`; para citar esta versión específica (v0.1.1), usar `10.5281/zenodo.22757737`. También se puede usar el botón "Cite this repository" de GitHub (lee automáticamente `CITATION.cff`).
+
 ## Licencia
 
 MIT — ver [`LICENSE`](LICENSE). Contenido de investigación en desarrollo activo.
@@ -250,6 +257,10 @@ despacho-inteligente-hidrico-solar-colombia/
 ├── scripts/        # Ingestion and automation scripts
 └── tests/          # Tests
 ```
+
+### How to cite
+
+This repository is permanently archived on Zenodo. Cite the project in general with the concept DOI `10.5281/zenodo.22757736` (always resolves to the latest version), or this specific version (v0.1.1) with `10.5281/zenodo.22757737`. GitHub's "Cite this repository" button also works (reads `CITATION.cff` automatically).
 
 ### License
 

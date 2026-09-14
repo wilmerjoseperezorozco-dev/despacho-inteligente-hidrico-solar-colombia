@@ -20,5 +20,13 @@ keywords:
   - "Sistema eléctrico colombiano"
   - "Microclimas andinos"
 license: MIT
-version: 0.1.0
-date-released: 2026-09-13
+version: 0.1.1
+date-released: 2026-09-14
+doi: 10.5281/zenodo.22757737
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.22757737
+    description: "DOI de esta versión (v0.1.1) en Zenodo"
+  - type: doi
+    value: 10.5281/zenodo.22757736
+    description: "DOI de concepto (siempre apunta a la última versión archivada en Zenodo)"
