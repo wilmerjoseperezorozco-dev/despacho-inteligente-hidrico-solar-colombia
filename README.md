@@ -156,7 +156,7 @@ Cuantificación del efecto de la cobertura fotovoltaica flotante sobre la tasa d
 |---|---|---|
 | Fase 0 — Marco y alcance | Investigación preliminar, selección de línea prioritaria, definición de alcance | ✅ Completada |
 | Fase 1 — Datos y estado del arte | Series XM/IDEAM/CHIRPS, delineación de cuenca, dataset consolidado | ✅ Completada — 9.740 días (2000-2026), 100% de cobertura |
-| Fase 2 — Modelo de predicción de caudal | Entrenamiento y validación con datos históricos | 🔄 En progreso — Nare supera a la persistencia (NSE 0,833 vs 0,815); Guatapé en NSE 0,272; ver tabla de métricas arriba |
+| Fase 2 — Modelo de predicción de caudal | Entrenamiento y validación con datos históricos | ✅ Completada — Nare supera a la persistencia (NSE 0,833 vs 0,815); Guatapé en NSE 0,272; ver [`docs/fase-2-cierre.md`](docs/fase-2-cierre.md) |
 | Fase 3 — Motor de optimización de despacho | Diseño y simulación del algoritmo de coordinación hídrico-solar | ⏳ Pendiente |
 | Fase 4 — Validación y propuesta | Backtesting, documentación técnica y propuesta formal a actores del sector | ⏳ Pendiente |
 
