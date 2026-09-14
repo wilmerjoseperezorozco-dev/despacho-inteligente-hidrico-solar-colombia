@@ -166,7 +166,8 @@ def main():
     df_feat = construir_features(df, args.objetivo)
 
     columnas = (
-        [f"q_lag{l}" for l in (1, 2, 3)]
+        ["q_hoy"]
+        + [f"q_lag{l}" for l in (1, 2, 3)]
         + [f"precip_lag{l}" for l in (1, 2, 3)]
         + ["precip_hoy", "precip_acum3"]
         + [f"{c}_hoy" for c in COLUMNAS_IDEAM_USABLES]

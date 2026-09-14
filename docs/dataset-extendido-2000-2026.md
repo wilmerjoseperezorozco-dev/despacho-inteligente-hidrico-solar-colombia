@@ -2,6 +2,13 @@
 
 Cierra [issue #1](https://github.com/wilmerjoseperezorozco-dev/despacho-inteligente-hidrico-solar-colombia/issues/1).
 
+> **Actualización 2026-09-14 — IMPORTANTE**: los números de NSE de este documento se obtuvieron con un bug
+> real descubierto poco después (el modelo nunca veía el caudal del propio día como predictor — ver
+> `docs/bug-q-hoy-faltante.md`). El diagnóstico de esta página sobre el sobreajuste (secciones 1-2, palanca =
+> volumen de datos) sigue siendo válido, pero las cifras exactas de NSE de las secciones 3-4 quedan superadas
+> — en particular, Nare pasa de **no superar** la persistencia a **sí superarla** una vez corregido el bug.
+> Ver `docs/bug-q-hoy-faltante.md` para las cifras vigentes.
+
 ## 1. Qué se hizo
 
 Se completó la descarga de CHIRPS diario para 2000-01-01 a 2023-12-31, complementando el rango 2024-2026 ya existente. **Resultado: cobertura del 100%, cero huecos, 2000-01-01 a 2026-08-31 (9.740 días consecutivos)** — verificado explícitamente, no asumido. El dataset consolidado (`data/processed/dataset_fase1_diario.csv`) pasó de 974 a **9.740 filas** (10 veces más datos de entrenamiento).

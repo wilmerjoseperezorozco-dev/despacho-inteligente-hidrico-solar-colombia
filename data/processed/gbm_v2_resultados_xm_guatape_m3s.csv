@@ -1,9 +1,9 @@
 ,valor
-nse,0.1946
-kge,0.2233
-kge_r,0.4434
-kge_alpha_variabilidad,0.4589
-kge_beta_sesgo,1.0285
-rmse_m3s,21.4228
-mae_m3s,15.2845
-pbias_pct,2.85
+nse,0.2716
+kge,0.3183
+kge_r,0.5214
+kge_alpha_variabilidad,0.5146
+kge_beta_sesgo,1.0099
+rmse_m3s,20.3756
+mae_m3s,14.1329
+pbias_pct,0.99

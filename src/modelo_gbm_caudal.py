@@ -47,8 +47,18 @@ COLUMNAS_IDEAM_USABLES = ["ideam_0023087150_m3s", "ideam_0023087660_m3s", "ideam
 
 
 def construir_features(df: pd.DataFrame, objetivo: str) -> pd.DataFrame:
+    """
+    BUG REAL encontrado y corregido el 2026-09-14 (ver docs/bug-q-hoy-faltante.md):
+    esta funcion NO incluia el caudal de HOY (fila D, sin desplazar) como predictor
+    explicito -- solo q_lag1/2/3 (ayer, antier, hace 3 dias). El objetivo (objetivo_t1)
+    es el caudal de MAÑANA (D+1), asi que el modelo nunca veia el dato mas reciente y
+    mas predictivo, mientras que la persistencia si lo usa (Q(t+1)=Q(t)). Esto afecto
+    a todos los modelos GBM de este proyecto hasta encontrarse (v1, v2). Corregido
+    agregando q_hoy = df[objetivo] sin desplazar.
+    """
     df = df.copy().sort_values("fecha").reset_index(drop=True)
 
+    df["q_hoy"] = df[objetivo]
     for lag in (1, 2, 3):
         df[f"q_lag{lag}"] = df[objetivo].shift(lag)
         df[f"precip_lag{lag}"] = df["chirps_precip_mm"].shift(lag)
@@ -92,7 +102,8 @@ def main():
     df_feat = construir_features(df, args.objetivo)
 
     columnas_predictoras = (
-        [f"q_lag{l}" for l in (1, 2, 3)]
+        ["q_hoy"]
+        + [f"q_lag{l}" for l in (1, 2, 3)]
         + [f"precip_lag{l}" for l in (1, 2, 3)]
         + ["precip_hoy", "precip_acum3"]
         + [f"{c}_hoy" for c in COLUMNAS_IDEAM_USABLES]

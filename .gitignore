@@ -41,6 +41,8 @@ data/processed/*
 !data/processed/gbm_predicciones_*.csv
 # Excepcion: resultados del modelo GBM v2 (regularizado + walk-forward), incl. variantes de experimentos
 !data/processed/gbm_v2_*.csv
+# Excepcion: predicciones del modelo de picos (issue #3)
+!data/processed/picos_predicciones_*.csv
 
 # Modelos entrenados (usar Git LFS o DVC si se requieren versionar)
 models/checkpoints/*.pt
