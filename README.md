@@ -14,6 +14,10 @@ Es un proyecto en **etapa de investigación**, con vocación de convertirse en u
 
 **Motivación adicional (2026-09-13):** la demanda eléctrica de la inteligencia artificial está creciendo más rápido que la capacidad de generación firme disponible globalmente, y los grandes compradores de energía ya buscan específicamente "clean firm power" — exactamente lo que este sistema está diseñado para producir. Ver [`docs/oportunidad-demanda-ia-energia.md`](docs/oportunidad-demanda-ia-energia.md) para el análisis completo, con cifras verificadas de Colombia, precedentes internacionales (Paraguay) y el contexto de ritmo/prudencia con el que la propia industria de IA está pidiendo avanzar.
 
+## Artículo
+
+El trabajo hasta la fecha (Fases 0-2) está consolidado como manuscrito en formato de artículo científico: [`despacho-hidrico-solar-guatape-articulo.docx`](despacho-hidrico-solar-guatape-articulo.docx). Incluye revisión de antecedentes (incl. el precedente directo de Poveda et al. 2001 sobre el río Nare), metodología completa, resultados con métricas reales (NSE/KGE/PBIAS), discusión honesta de limitaciones, y contexto de la demanda energética global hacia 2030.
+
 ---
 
 ## Problema técnico
