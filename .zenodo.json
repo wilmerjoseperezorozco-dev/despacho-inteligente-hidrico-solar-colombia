@@ -1,0 +1,26 @@
+{
+  "title": "Despacho Inteligente Hídrico-Solar — Colombia",
+  "description": "Investigación aplicada para coordinar en tiempo real la generación hidroeléctrica y solar fotovoltaica flotante en Colombia, mediante predicción de caudal basada en microclimas andinos. Caso de estudio: embalse Peñol-Guatapé, Antioquia. Incluye pipeline reproducible de adquisición de datos oficiales (XM, IDEAM, CHIRPS), delineación automática de cuenca, y evaluación de modelos de predicción de caudal (persistencia, climatología, Gradient Boosting) con validación walk-forward y métricas hidrológicas estándar (NSE, KGE).",
+  "creators": [
+    {
+      "name": "Pérez Orozco, Wilmer José",
+      "affiliation": "Investigación independiente, Barranquilla, Colombia"
+    }
+  ],
+  "keywords": [
+    "despacho de energía",
+    "energía solar flotante",
+    "predicción de caudal",
+    "machine learning",
+    "gradient boosting",
+    "sistema eléctrico colombiano",
+    "microclimas andinos",
+    "hidroelectricidad",
+    "energía renovable",
+    "Colombia"
+  ],
+  "license": "MIT",
+  "upload_type": "software",
+  "access_right": "open",
+  "language": "spa"
+}

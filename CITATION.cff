@@ -5,7 +5,9 @@ type: software
 authors:
   - family-names: Pérez Orozco
     given-names: Wilmer José
-    orcid: "https://orcid.org/0000-0000-0000-0000"  # Actualiza con tu ORCID si tienes
+    # Sin ORCID todavía -- un ID de ejemplo/placeholder aqui fallaria la validacion de Zenodo
+    # (los ORCID reales llevan un digito de verificacion). Registrar uno gratis en orcid.org
+    # y agregar la linea "orcid: https://orcid.org/XXXX-XXXX-XXXX-XXXX" cuando se tenga.
 repository-code: "https://github.com/wilmerjoseperezorozco-dev/despacho-inteligente-hidrico-solar-colombia"
 url: "https://github.com/wilmerjoseperezorozco-dev/despacho-inteligente-hidrico-solar-colombia"
 abstract: "Investigación aplicada para coordinar en tiempo real la generación hidroeléctrica y solar fotovoltaica flotante en Colombia mediante predicción de caudal basada en microclimas andinos."
