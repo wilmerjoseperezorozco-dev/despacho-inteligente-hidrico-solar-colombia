@@ -50,8 +50,13 @@ GRILLA_HIPERPARAMETROS = {
 }
 
 
-def seleccionar_hiperparametros(X_train: pd.DataFrame, y_train: pd.Series, n_splits: int = 5) -> dict:
-    """Busqueda por validacion cruzada temporal (TimeSeriesSplit) -- nunca toca el test."""
+def seleccionar_hiperparametros(X_train: pd.DataFrame, y_train: pd.Series, n_splits: int = 5, log_objetivo: bool = False) -> dict:
+    """Busqueda por validacion cruzada temporal (TimeSeriesSplit) -- nunca toca el test.
+
+    Si log_objetivo=True, el modelo se ajusta sobre log1p(y) (motivado por el sesgo de
+    sobreestimacion sistematica en caudales bajos documentado en docs/modelo-gbm-regularizado-v2.md),
+    pero el NSE de seleccion siempre se calcula destransformado (expm1) a unidades reales de
+    caudal -- de lo contrario no seria comparable contra la busqueda sin transformar."""
     tscv = TimeSeriesSplit(n_splits=n_splits)
     combinaciones = [
         dict(zip(GRILLA_HIPERPARAMETROS.keys(), valores))
@@ -64,6 +69,7 @@ def seleccionar_hiperparametros(X_train: pd.DataFrame, y_train: pd.Series, n_spl
         for idx_train, idx_val in tscv.split(X_train):
             X_tr, X_val = X_train.iloc[idx_train], X_train.iloc[idx_val]
             y_tr, y_val = y_train.iloc[idx_train], y_train.iloc[idx_val]
+            objetivo_ajuste = np.log1p(y_tr) if log_objetivo else y_tr
             modelo = HistGradientBoostingRegressor(
                 max_iter=300,
                 early_stopping=True,
@@ -72,9 +78,14 @@ def seleccionar_hiperparametros(X_train: pd.DataFrame, y_train: pd.Series, n_spl
                 random_state=42,
                 **params,
             )
-            modelo.fit(X_tr, y_tr)
-            nse_tr = resumen_metricas(y_tr.values, modelo.predict(X_tr))["nse"]
-            nse_val = resumen_metricas(y_val.values, modelo.predict(X_val))["nse"]
+            modelo.fit(X_tr, objetivo_ajuste)
+            pred_tr = modelo.predict(X_tr)
+            pred_val = modelo.predict(X_val)
+            if log_objetivo:
+                pred_tr = np.expm1(pred_tr)
+                pred_val = np.expm1(pred_val)
+            nse_tr = resumen_metricas(y_tr.values, pred_tr)["nse"]
+            nse_val = resumen_metricas(y_val.values, pred_val)["nse"]
             nse_folds.append(nse_val)
             gap_folds.append(nse_tr - nse_val)
 
@@ -97,6 +108,7 @@ def walk_forward_hist_gbm(
     inicio_test: int,
     params: dict,
     ventana_reentreno: int = 30,
+    log_objetivo: bool = False,
 ) -> pd.DataFrame:
     """Reentrena cada `ventana_reentreno` dias con todo lo disponible hasta ese punto
     (ventana expandida), y predice solo el bloque siguiente -- nunca ve el futuro."""
@@ -108,6 +120,7 @@ def walk_forward_hist_gbm(
         train = df_valido.iloc[:corte]
         bloque = df_valido.iloc[corte:fin_bloque]
 
+        objetivo_ajuste = np.log1p(train[objetivo_col]) if log_objetivo else train[objetivo_col]
         modelo = HistGradientBoostingRegressor(
             max_iter=300,
             early_stopping=True,
@@ -116,8 +129,10 @@ def walk_forward_hist_gbm(
             random_state=42,
             **params,
         )
-        modelo.fit(train[columnas], train[objetivo_col])
+        modelo.fit(train[columnas], objetivo_ajuste)
         pred = modelo.predict(bloque[columnas])
+        if log_objetivo:
+            pred = np.expm1(pred)
 
         predicciones.append(
             pd.DataFrame({"fecha": bloque["fecha"].values, "obs": bloque[objetivo_col].values, "pred_gbm_v2": pred})
@@ -138,6 +153,12 @@ def main():
         nargs="*",
         default=[],
         help="Columnas predictoras a excluir (ej. para probar el efecto de quitar una variable con importancia negativa)",
+    )
+    ap.add_argument(
+        "--log-objetivo",
+        action="store_true",
+        help="Ajustar el modelo sobre log1p(caudal) en vez del caudal crudo -- motivado por el sesgo de "
+        "sobreestimacion sistematica en caudales bajos documentado para NARE (docs/modelo-gbm-regularizado-v2.md)",
     )
     args = ap.parse_args()
 
@@ -168,8 +189,11 @@ def main():
     print(f"Train para seleccion de hiperparametros: {train['fecha'].min().date()} a {train['fecha'].max().date()} ({len(train)} dias)")
     print(f"Test (walk-forward, nunca visto durante la seleccion): {df_valido.iloc[corte]['fecha'].date()} a {df_valido.iloc[-1]['fecha'].date()} ({n - corte} dias)\n")
 
+    if args.log_objetivo:
+        print("Ajustando el modelo sobre log1p(caudal) -- metricas siempre reportadas en unidades reales (expm1).")
+
     print("Buscando hiperparametros por validacion cruzada temporal (TimeSeriesSplit, 5 folds)...")
-    tabla_busqueda = seleccionar_hiperparametros(train[columnas], train["objetivo_t1"])
+    tabla_busqueda = seleccionar_hiperparametros(train[columnas], train["objetivo_t1"], log_objetivo=args.log_objetivo)
     print(tabla_busqueda.head(10).to_string(index=False))
 
     mejor = tabla_busqueda.iloc[0]
@@ -181,7 +205,9 @@ def main():
     print(f"Gap train-val promedio con esta configuracion: {mejor['gap_train_val_promedio']:.4f} (antes era >0.3 con el modelo v1)")
 
     print(f"\nCorriendo walk-forward real en el periodo de prueba (reentreno cada {args.ventana_reentreno} dias)...")
-    df_pred = walk_forward_hist_gbm(df_valido, columnas, "objetivo_t1", corte, params_elegidos, args.ventana_reentreno)
+    df_pred = walk_forward_hist_gbm(
+        df_valido, columnas, "objetivo_t1", corte, params_elegidos, args.ventana_reentreno, log_objetivo=args.log_objetivo
+    )
 
     metricas_test = resumen_metricas(df_pred["obs"].values, df_pred["pred_gbm_v2"].values)
     print("\nDesempeño en test (walk-forward real, no un solo ajuste estatico):")
@@ -192,10 +218,21 @@ def main():
     modelo_final = HistGradientBoostingRegressor(
         max_iter=300, early_stopping=True, n_iter_no_change=15, validation_fraction=0.15, random_state=42, **params_elegidos
     )
-    modelo_final.fit(train[columnas], train["objetivo_t1"])
+    objetivo_ajuste_final = np.log1p(train["objetivo_t1"]) if args.log_objetivo else train["objetivo_t1"]
+    modelo_final.fit(train[columnas], objetivo_ajuste_final)
+
+    def score_mse_unidades_reales(estimador, X, y):
+        """neg_mean_squared_error pero siempre en unidades reales de caudal, aunque el
+        estimador haya sido ajustado en escala log1p -- de lo contrario la importancia por
+        permutacion no seria comparable entre corridas con y sin --log-objetivo."""
+        pred = estimador.predict(X)
+        if args.log_objetivo:
+            pred = np.expm1(pred)
+        return -np.mean((y.values - pred) ** 2)
+
     resultado_perm = permutation_importance(
         modelo_final, df_valido.iloc[corte:][columnas], df_valido.iloc[corte:]["objetivo_t1"],
-        n_repeats=20, random_state=42, scoring="neg_mean_squared_error",
+        n_repeats=20, random_state=42, scoring=score_mse_unidades_reales,
     )
     importancias = pd.Series(resultado_perm.importances_mean, index=columnas).sort_values(ascending=False)
     print("\nImportancia por permutacion (reduccion de MSE al mezclar cada variable, en el periodo de prueba):")
@@ -204,6 +241,8 @@ def main():
     sufijo = args.objetivo
     if args.excluir:
         sufijo += "_sin_" + "_".join(c.replace("ideam_", "").replace("_m3s_hoy", "") for c in args.excluir)
+    if args.log_objetivo:
+        sufijo += "_log"
 
     salida_dir = Path("../data/processed")
     tabla_busqueda.to_csv(salida_dir / f"gbm_v2_busqueda_hiperparametros_{sufijo}.csv", index=False)
