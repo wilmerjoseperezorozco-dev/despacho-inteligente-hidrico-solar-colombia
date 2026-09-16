@@ -98,6 +98,10 @@ Se construyó el motor de optimización (programación lineal, PuLP/CBC) que dec
 
 Es un backtest de información perfecta (oracle) — no una política operativa desplegable en tiempo real. Ver [`docs/motor-despacho-hidrico-solar.md`](docs/motor-despacho-hidrico-solar.md) (metodología y supuestos) y [`docs/fase-3-resultados.md`](docs/fase-3-resultados.md) (resultados completos).
 
+### ¿Se necesita una presa nueva para replicar esto en Colombia?
+
+No. Ninguno de los precedentes reales investigados (China, Vietnam, Tailandia, India, Portugal, ni el propio Aquasol en Colombia) construyó una presa nueva — todos son parques solares flotantes sobre embalses hidroeléctricos ya existentes. Colombia tiene ~30 embalses activos (catálogo oficial de XM); el candidato más claro para una segunda aplicación completa del framework es **Urrá I (río Sinú)**, que ya tiene un piloto solar flotante real (Aquasol, 1,5 MW — apenas 0,44% de sus 340 MW hidráulicos), muy por debajo incluso del precedente más conservador usado en este proyecto. Ver [`docs/replicabilidad-otras-presas-colombia.md`](docs/replicabilidad-otras-presas-colombia.md) para el análisis completo de 10 embalses colombianos y el estado del arte mundial en ingeniería de presas/FV flotante (incl. el hallazgo de que Suramérica tiene el mayor potencial normalizado de generación FV flotante del mundo).
+
 ---
 
 ## Problema técnico
@@ -261,6 +265,8 @@ Full methodology: [`docs/bug-q-hoy-faltante.md`](docs/bug-q-hoy-faltante.md) (Sp
 | Real bug in the optimizer itself | The first version only maximized the reservoir floor, leaving the rest of the days' water use undetermined — CBC returned "optimal" solutions that barely used available solar. Fixed with a two-stage optimization |
 
 This is a perfect-information (oracle) backtest — not a real-time deployable policy. See [`docs/motor-despacho-hidrico-solar.md`](docs/motor-despacho-hidrico-solar.md) and [`docs/fase-3-resultados.md`](docs/fase-3-resultados.md) (Spanish) for full methodology and results.
+
+**Would a new dam be needed to replicate this elsewhere in Colombia?** No. None of the real precedents investigated (China, Vietnam, Thailand, India, Portugal, or Colombia's own Aquasol) built a new dam — all are floating solar parks on existing hydropower reservoirs. Colombia has ~30 active reservoirs (official XM catalog); the clearest candidate for a second full application of this framework is **Urrá I (Sinú river)**, which already has a real floating solar pilot (Aquasol, 1.5 MW — just 0.44% of its 340 MW hydro capacity), well below even the most conservative precedent used in this project. See [`docs/replicabilidad-otras-presas-colombia.md`](docs/replicabilidad-otras-presas-colombia.md) (Spanish) for the full analysis of 10 Colombian reservoirs and the global state of the art in dam/floating-PV engineering — including the finding that South America has the highest normalized floating-solar generation potential in the world.
 
 ### Technical problem
 
