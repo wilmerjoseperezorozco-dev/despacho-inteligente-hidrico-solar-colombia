@@ -1,0 +1,7 @@
+codigo,nombre,fecha_inicio,fecha_fin,registros,dias_totales_periodo,cobertura_pct,aprobados,preliminares,caudal_min_m3s,caudal_max_m3s,caudal_medio_m3s
+0013037040,(nombre no registrado localmente),1993-01-01,2026-06-30,10200,12234,83.4,0,10200,10.8,1342.0,356.62
+0013047040,(nombre no registrado localmente),1991-01-01,2010-12-31,6446,7305,88.2,0,6446,20.1,1395.0,334.76
+0013017030,(nombre no registrado localmente),1974-06-01,1982-09-30,852,3044,28.0,0,852,49.49,749.1,275.48
+0013037010,(nombre no registrado localmente),1959-09-01,1995-10-28,12044,13207,91.2,0,12044,37.0,1808.0,346.27
+0013017020,(nombre no registrado localmente),1966-03-01,1998-11-18,9825,11951,82.2,0,9825,23.2,1198.0,237.82
+0013027010,(nombre no registrado localmente),1991-01-01,2000-01-21,2900,3308,87.7,0,2900,2.0,400.0,115.78

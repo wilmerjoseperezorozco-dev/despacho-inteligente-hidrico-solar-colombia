@@ -16,6 +16,10 @@ env/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
+# Directorios temporales de scripts de descarga/delineacion (cache de DEM, rasters globales, etc.)
+scripts/_tmp_*/
+**/_tmp_globales/
+
 # Datos (no versionar series descargadas ni procesadas pesadas)
 data/raw/*
 !data/raw/.gitkeep
@@ -55,6 +59,13 @@ data/processed/*
 !data/processed/dataset_fase3_despacho.csv
 !data/processed/solar_flotante_escenarios.csv
 !data/processed/despacho_resultados_*.csv
+# Excepcion: replica en Urra I (issue #14) - mismo criterio que Guatape
+!data/raw/xm_urra/
+!data/raw/xm_urra/*.csv
+!data/raw/solar_power_urra/
+!data/raw/solar_power_urra/*.csv
+!data/processed/cuenca_solar_urra_escenarios.csv
+!data/processed/dataset_urra_diario.csv
 
 # Modelos entrenados (usar Git LFS o DVC si se requieren versionar)
 models/checkpoints/*.pt

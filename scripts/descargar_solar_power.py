@@ -21,9 +21,14 @@ A diferencia de CHIRPS/XM, esta API no tiene límite de rango por solicitud
 documentado en la práctica; aun así se descarga por bloques anuales para
 poder reanudar si se interrumpe.
 
+Reutilizable para otros embalses vía --lat/--lon/--nombre (usado por primera
+vez el 2026-09-16 para el embalse Urrá I, río Sinú — issue #14).
+
 Uso:
     python descargar_solar_power.py --inicio 2000-01-01 --fin 2026-08-31 \
         --salida ../data/raw/solar_power
+    python descargar_solar_power.py --inicio 2000-01-01 --fin 2026-08-31 \
+        --lat 7.94 --lon -76.29 --nombre urra --salida ../data/raw/solar_power_urra
 """
 
 import argparse
@@ -34,7 +39,7 @@ from pathlib import Path
 import requests
 
 API_URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
-LAT, LON = 6.2611, -75.1900  # Presa Santa Rita, embalse Peñol-Guatapé
+LAT_DEFAULT, LON_DEFAULT = 6.2611, -75.1900  # Presa Santa Rita, embalse Peñol-Guatapé
 PARAMETROS = ["ALLSKY_SFC_SW_DWN", "CLRSKY_SFC_SW_DWN", "T2M"]
 
 
@@ -52,12 +57,12 @@ def ya_procesados(csv_path: Path) -> set:
         return {row["fecha"] for row in csv.DictReader(f)}
 
 
-def consultar_anio(desde: date, hasta: date) -> dict:
+def consultar_anio(desde: date, hasta: date, lat: float, lon: float) -> dict:
     params = {
         "parameters": ",".join(PARAMETROS),
         "community": "RE",
-        "longitude": LON,
-        "latitude": LAT,
+        "longitude": lon,
+        "latitude": lat,
         "start": desde.strftime("%Y%m%d"),
         "end": hasta.strftime("%Y%m%d"),
         "format": "JSON",
@@ -74,6 +79,9 @@ def main():
     ap.add_argument("--inicio", required=True)
     ap.add_argument("--fin", required=True)
     ap.add_argument("--salida", required=True)
+    ap.add_argument("--lat", type=float, default=LAT_DEFAULT, help="Latitud del punto (por defecto: Presa Santa Rita, Peñol-Guatapé)")
+    ap.add_argument("--lon", type=float, default=LON_DEFAULT, help="Longitud del punto (por defecto: Presa Santa Rita, Peñol-Guatapé)")
+    ap.add_argument("--nombre", default="penol", help="Identificador para el nombre del archivo de salida (por defecto: penol)")
     args = ap.parse_args()
 
     inicio = date.fromisoformat(args.inicio)
@@ -81,7 +89,7 @@ def main():
     salida = Path(args.salida)
     salida.mkdir(parents=True, exist_ok=True)
 
-    csv_path = salida / "solar_power_penol.csv"
+    csv_path = salida / f"solar_power_{args.nombre}.csv"
     procesadas = ya_procesados(csv_path)
     columnas = ["fecha"] + [p.lower() for p in PARAMETROS]
     escribir_encabezado = not csv_path.exists()
@@ -96,7 +104,7 @@ def main():
             if fechas_bloque and fechas_bloque.issubset({f.replace("-", "") for f in procesadas}):
                 continue
             print(f"[{i}/{len(bloques)}] {desde} a {hasta}...")
-            props = consultar_anio(desde, hasta)
+            props = consultar_anio(desde, hasta, args.lat, args.lon)
             if not props:
                 continue
             fechas_api = sorted(props.get(PARAMETROS[0], {}).keys())
