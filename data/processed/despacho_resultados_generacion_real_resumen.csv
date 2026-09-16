@@ -1,0 +1,5 @@
+escenario,z_volumen_minimo_gwh,hidro_total_gwh,mejora_vs_sin_solar_gwh
+sin_solar,3796.8125,17931.127224169,0.0
+piloto,3796.8309,17892.0893021468,0.0184
+intermedio,3797.3707,16817.84745362,0.5582
+agresivo,3798.1781,15289.592829777,1.3656

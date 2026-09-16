@@ -43,6 +43,18 @@ data/processed/*
 !data/processed/gbm_v2_*.csv
 # Excepcion: predicciones del modelo de picos (issue #3)
 !data/processed/picos_predicciones_*.csv
+# Excepcion: series de Fase 3 - embalse, generacion, obligacion firme y aportes en energia (XM)
+!data/raw/xm_embalse_generacion/
+!data/raw/xm_embalse_generacion/*.csv
+!data/raw/xm_aportes_energia/
+!data/raw/xm_aportes_energia/*.csv
+# Excepcion: irradiancia solar diaria (NASA POWER) para el modelo FV flotante simulado
+!data/raw/solar_power/
+!data/raw/solar_power/*.csv
+# Excepcion: dataset consolidado y resultados del motor de despacho (Fase 3)
+!data/processed/dataset_fase3_despacho.csv
+!data/processed/solar_flotante_escenarios.csv
+!data/processed/despacho_resultados_*.csv
 
 # Modelos entrenados (usar Git LFS o DVC si se requieren versionar)
 models/checkpoints/*.pt

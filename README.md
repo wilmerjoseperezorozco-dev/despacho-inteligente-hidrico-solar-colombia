@@ -85,6 +85,19 @@ Se documentan explícitamente porque son tan parte del resultado como las métri
 6. Un archivo vacío colado accidentalmente en un commit público, encontrado en auditoría y eliminado.
 7. Licencia declarada en `CITATION.cff` sin archivo `LICENSE` físico — corregido.
 
+### Fase 3 — Motor de despacho: un hallazgo honesto con matices, no "el solar lo resuelve todo"
+
+Se construyó el motor de optimización (programación lineal, PuLP/CBC) que decide cuánta energía turbinar cada día para cumplir la demanda con el menor consumo posible del embalse, usando datos reales de XM (volumen del embalse, aportes en energía, generación, Obligación de Energía Firme de la Central Guatapé) y tres escenarios de generación solar flotante simulada anclados a proyectos reales ya construidos (Alqueva, Da Mi, Longyangxia — no existe hoy un proyecto de solar flotante en este embalse).
+
+| Resultado | Hallazgo |
+|---|---|
+| Piso mínimo del embalse en 5,7 años (2021-2026) | Prácticamente no se mueve en ningún escenario (+0,0 a +1,4 GWh sobre ~3.800 GWh) — el solar a esta escala **no es un seguro contra sequías multianuales** |
+| Turbinado total evitado (escenario más ambicioso, 372 MWp) | **14,7% menos hidráulica turbinada** en 5,7 años frente a igualar la generación real histórica — el efecto real está en el uso cotidiano del agua, no en el peor escenario |
+| Aprovechamiento del solar generado | 90-99% según el escenario — el resto se pierde por *curtailment* (sin batería que absorba el excedente en días de alta irradiancia), el mismo problema que llevó a Alqueva a incluir una batería real |
+| Bug real en el propio motor | La primera versión maximizaba solo el piso mínimo, dejando indeterminado cuánta agua ahorraba el resto de los días — CBC devolvía soluciones "óptimas" que casi no usaban el solar disponible. Corregido con optimización en dos etapas |
+
+Es un backtest de información perfecta (oracle) — no una política operativa desplegable en tiempo real. Ver [`docs/motor-despacho-hidrico-solar.md`](docs/motor-despacho-hidrico-solar.md) (metodología y supuestos) y [`docs/fase-3-resultados.md`](docs/fase-3-resultados.md) (resultados completos).
+
 ---
 
 ## Problema técnico
@@ -101,7 +114,7 @@ Se documentan explícitamente porque son tan parte del resultado como las métri
 Modelo de aprendizaje automático (Gradient Boosting sobre series temporales, con caudal rezagado, precipitación satelital y estaciones tributarias como predictores) entrenado con series históricas de precipitación, temperatura y caudal en la cuenca de interés, con el objetivo de generar pronósticos de caudal afluente a corto plazo.
 
 ### 2. Motor de optimización de despacho hídrico-solar
-Algoritmo de optimización (programación estocástica / control predictivo) que, dado el pronóstico de caudal y la generación solar esperada, recomienda la mezcla de despacho que minimiza el riesgo de vaciado crítico del embalse y maximiza la energía firme entregada. *(Pendiente de Fase 3.)*
+Algoritmo de optimización (programación lineal, PuLP/CBC — ver limitación sobre información perfecta vs. pronóstico real en la documentación) que, dado el aporte de energía al embalse y la generación solar simulada, decide la mezcla de despacho que minimiza el consumo de agua turbinada para una demanda dada. Primera entrega completa en Fase 3: ver [`docs/motor-despacho-hidrico-solar.md`](docs/motor-despacho-hidrico-solar.md).
 
 ### 3. Modelo de reducción de evaporación
 Cuantificación del efecto de la cobertura fotovoltaica flotante sobre la tasa de evaporación del embalse, integrado como variable adicional de conservación de recurso dentro del motor de optimización. *(Pendiente de Fase 3.)*
@@ -157,7 +170,7 @@ Cuantificación del efecto de la cobertura fotovoltaica flotante sobre la tasa d
 | Fase 0 — Marco y alcance | Investigación preliminar, selección de línea prioritaria, definición de alcance | ✅ Completada |
 | Fase 1 — Datos y estado del arte | Series XM/IDEAM/CHIRPS, delineación de cuenca, dataset consolidado | ✅ Completada — 9.740 días (2000-2026), 100% de cobertura |
 | Fase 2 — Modelo de predicción de caudal | Entrenamiento y validación con datos históricos | ✅ Completada — Nare supera a la persistencia (NSE 0,833 vs 0,815); Guatapé en NSE 0,272; ver [`docs/fase-2-cierre.md`](docs/fase-2-cierre.md) |
-| Fase 3 — Motor de optimización de despacho | Diseño y simulación del algoritmo de coordinación hídrico-solar | ⏳ Pendiente |
+| Fase 3 — Motor de optimización de despacho | Diseño y simulación del algoritmo de coordinación hídrico-solar | ✅ Primera entrega — piso mínimo del embalse casi no mejora, pero -14,7% de turbinado en el escenario más ambicioso; ver [docs/fase-3-resultados.md](docs/fase-3-resultados.md) |
 | Fase 4 — Validación y propuesta | Backtesting, documentación técnica y propuesta formal a actores del sector | ⏳ Pendiente |
 
 Issues públicos de trabajo pendiente concreto: [ver issues abiertos](https://github.com/wilmerjoseperezorozco-dev/despacho-inteligente-hidrico-solar-colombia/issues).
@@ -237,6 +250,17 @@ This is a **research-stage** project, intended to become a formal technical prop
 Full methodology: [`docs/bug-q-hoy-faltante.md`](docs/bug-q-hoy-faltante.md) (Spanish — current numbers) and [`docs/dataset-extendido-2000-2026.md`](docs/dataset-extendido-2000-2026.md).
 
 **All real bugs found and fixed in this project** (documented because they are as much part of the result as the metrics): (1) complete loss of a download run from non-incremental writes, fixed with auto-resume; (2) inconsistent test window across models from an IDEAM station reporting gap, fixed with explicit imputation; (3) a silent entity rename in the XM API ("Nare" → "Nare CP"), caught by a data asymmetry, undocumented by the source; (4) a predictor-variable conclusion (Riotex) that did not replicate at scale — explicitly reverted; (5) **highest-impact bug**: today's own flow was never included as a predictor despite being the most obviously useful signal — fixed, and it changes the project's headline result; (6) an empty file accidentally committed to the public repo, found in audit and removed; (7) a license declared in `CITATION.cff` with no physical `LICENSE` file — fixed.
+
+**Phase 3 — Dispatch engine: an honest, nuanced result, not "solar solves everything."** A linear-programming dispatch engine (PuLP/CBC) was built to decide daily hydro turbining to meet demand at minimum reservoir drawdown, using real XM data (reservoir volume, energy-equivalent inflows, generation, firm energy obligation for the Guatapé plant) and three simulated floating-solar scenarios anchored to real built projects (Alqueva, Da Mi, Longyangxia — no floating solar project exists on this reservoir today).
+
+| Result | Finding |
+|---|---|
+| Reservoir floor over 5.7 years (2021-2026) | Barely moves under any scenario (+0.0 to +1.4 GWh out of ~3,800 GWh) — at this scale, solar is **not a hedge against multi-year droughts** |
+| Total turbining avoided (most ambitious scenario, 372 MWp) | **14.7% less hydro turbined** over 5.7 years vs. matching real historical generation — the real effect is on day-to-day water use, not the worst-case scenario |
+| Solar utilization | 90-99% depending on scenario — the rest is lost to curtailment (no battery to absorb excess on high-irradiance days), the same problem that led Alqueva to include a real battery |
+| Real bug in the optimizer itself | The first version only maximized the reservoir floor, leaving the rest of the days' water use undetermined — CBC returned "optimal" solutions that barely used available solar. Fixed with a two-stage optimization |
+
+This is a perfect-information (oracle) backtest — not a real-time deployable policy. See [`docs/motor-despacho-hidrico-solar.md`](docs/motor-despacho-hidrico-solar.md) and [`docs/fase-3-resultados.md`](docs/fase-3-resultados.md) (Spanish) for full methodology and results.
 
 ### Technical problem
 
